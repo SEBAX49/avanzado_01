@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react";
 
 type Props = {
   numero: number;
@@ -32,4 +33,5 @@ function CardDetail({
     </div>
   );
 }
+
 export default CardDetail
