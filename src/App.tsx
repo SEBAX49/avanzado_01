@@ -1,50 +1,17 @@
-import { useState } from "react";
-/*const cartaEjemplo = { numero: '1', elemento: 'fuego'};
-function Carta({carta}) {
-    return <h1>Hola soy Carta {carta.numero}{carta.fuego} !</h1>;
-} 
-export default function app() {
-    return (
-        <div>
-            <Carta carta={cartaEjemplo}/>
-        </div>
-    );
-}*/
 
+import CardDetail from './CardDetail';
 
-
-/*const [clickText, setClickText] = useState(
-    'you have not clicked this  annoying ad :(',
-);
-const handleClickOfThisButton = () =>
-    setClickText('you clicked the annoying ad!');
-return (
-    <div>
-       <p> {clickText} </p>
-        <button onClick={() => handleClickOfThisButton}>click here!</button>
-    </div>
-);*/
-// 1. Asegúrate de importar useState al principio del archivo:
-// import { useState } from 'react';
-
-function Carta() {
-  // 1. El estado debe estar dentro de la función
-  const [clickText, setClickText] = useState(
-    'you have not clicked this annoying ad :(',
-  );
-
-  // 2. La lógica de la función también va dentro
-  const handleClickOfThisButton = () => {
-    setClickText('you clicked the annoying ad!');
-  };
-
-  // 3. El return es lo que el componente muestra
+function App() {
   return (
-    <div>
-      {clickText}
-      <button onClick={handleClickOfThisButton}>click here!</button>
-    </div>
+    <CardDetail 
+      ataque={300}
+      nombre="pepe"
+      defensa={1}
+      descripcion="la rana pepe"
+      imagen="https://m.media-amazon.com/images/I/61MMFc1RBvL._AC_SX300_SY300_QL70_ML2_.jpg" 
+      numero={1}
+      tipo="CULEAO"
+    />
   );
 }
-
-export default Carta;
+ export default App;
