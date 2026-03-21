@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 
 type Props = {
-  numero: number;
+  numero: string;
   nombre: string;
   tipo: string;
   ataque: number;
