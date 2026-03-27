@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import CardDetail from './CardDetail';
+import Modal from './Modal';
 
 const personajes = [
   {
@@ -8,7 +10,7 @@ const personajes = [
     ataque: 300,
     defensa: 1,
     imagen: "URL_DE_TU_IMAGEN_DE_PEPE",
-    descripcion: "La rana más poderosa del reino digital. Temido por todos."
+    descripcion: "La rana más poderosa del reino digital. Su mirada puede juzgar tu alma desde el otro lado de la pantalla."
   },
   {
     nombre: "Electivire",
@@ -17,7 +19,7 @@ const personajes = [
     ataque: 122,
     defensa: 80,
     imagen: "URL_DE_ELECTIVIRE",
-    descripcion: "Electivire, el Pokémon Rayo. Genera millones de voltios con sus puños."
+    descripcion: "Electivire, el Pokémon Rayo. Sus dos colas pueden liberar una descarga de 20.000 voltios en un instante."
   },
   {
     nombre: "Charizard",
@@ -26,11 +28,23 @@ const personajes = [
     ataque: 184,
     defensa: 78,
     imagen: "",
-    descripcion: "Sus llamas son lo suficientemente calientes como para fundir roca."
+    descripcion: "Sus llamas son lo suficientemente calientes como para fundir roca sólida. Es el epítome del poder ígneo."
   },
 ];
 
 function App() {
+  const [selectedPersonaje, setSelectedPersonaje] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (p: any) => {
+    setSelectedPersonaje(p);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden font-sans">
 
@@ -57,13 +71,6 @@ function App() {
           animation: "orb-move 15s ease-in-out infinite reverse",
         }}
       />
-      <div
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full -z-10 opacity-10 blur-[120px]"
-        style={{
-          background: "radial-gradient(circle, #38bdf8, transparent 70%)",
-          animation: "orb-move 18s ease-in-out infinite 3s",
-        }}
-      />
 
       {/* ── Content ── */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-16">
@@ -75,7 +82,7 @@ function App() {
             Mi Colección
           </h1>
           <p className="text-white/40 text-lg max-w-md mx-auto leading-relaxed">
-            Explora tus personajes legendarios. Haz clic en las cartas para descubrir más.
+            Explora tus personajes legendarios. Haz clic en las cartas para ver sus detalles.
           </p>
 
           {/* Divider */}
@@ -94,15 +101,11 @@ function App() {
             <div
               key={index}
               style={{ animation: `card-enter 0.6s cubic-bezier(0.16,1,0.3,1) ${index * 150}ms both` }}
+              onClick={() => handleOpenModal(p)}
+              className="cursor-pointer"
             >
               <CardDetail
-                nombre={p.nombre}
-                numero={p.numero}
-                tipo={p.tipo}
-                ataque={p.ataque}
-                defensa={p.defensa}
-                imagen={p.imagen}
-                descripcion={p.descripcion}
+                {...p}
                 delay={index * 150}
               />
             </div>
@@ -119,6 +122,13 @@ function App() {
           </p>
         </footer>
       </div>
+
+      {/* ── Modal ── */}
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        personaje={selectedPersonaje} 
+      />
     </div>
   );
 }
