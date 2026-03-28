@@ -9,6 +9,7 @@ type Props = {
   descripcion: string;
   imagen: string;
   delay?: number;
+  
 };
 
 const tipoColors: Record<string, { from: string; to: string; badge: string; bar: string }> = {

@@ -6,4 +6,5 @@ export interface Card {
   defensa: number;
   descripcion: string;
   imagen: string;
+  vida: number;
 }

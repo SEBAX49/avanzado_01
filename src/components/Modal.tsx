@@ -3,6 +3,8 @@ import { useEffect } from "react";
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  // Añadimos la función que manejará la eliminación en el estado global/padre
+  onDelete: (numero: string) => void; 
   personaje: {
     nombre: string;
     numero: string;
@@ -14,8 +16,18 @@ type ModalProps = {
   } | null;
 };
 
+// 1. Componente de botón reutilizable y funcional
+function BotonEliminar({ onClick }: { onClick: () => void }) {
+  return (
+    <button 
+      onClick={onClick}
+      className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-2xl cursor-pointer transition-colors font-bold text-xs uppercase"
+    >
+      Eliminar
+    </button>
+  );
+}
 
-//colores de los tipos de los personajes Aviso para sebas
 const tipoColors: Record<string, { from: string; to: string; badge: string }> = {
   CULEAO: { from: "#7c3aed", to: "#ec4899", badge: "bg-pink-500/20 text-pink-300 border-pink-500/40" },
   "Eléctrico": { from: "#f59e0b", to: "#fbbf24", badge: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40" },
@@ -25,7 +37,7 @@ const tipoColors: Record<string, { from: string; to: string; badge: string }> = 
   default: { from: "#6366f1", to: "#8b5cf6", badge: "bg-violet-500/20 text-violet-300 border-violet-500/40" },
 };
 
-function Modal({ isOpen, onClose, personaje }: ModalProps) {
+function Modal({ isOpen, onClose, onDelete, personaje }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -38,6 +50,14 @@ function Modal({ isOpen, onClose, personaje }: ModalProps) {
   }, [isOpen]);
 
   if (!isOpen || !personaje) return null;
+
+  // 2. Función para manejar el clic en eliminar
+  const handleDelete = () => {
+    if (window.confirm(`¿Estás seguro de que quieres eliminar a ${personaje.nombre}?`)) {
+      onDelete(personaje.numero);
+      onClose(); // Cerramos el modal después de eliminar
+    }
+  };
 
   const theme = tipoColors[personaje.tipo] ?? tipoColors.default;
 
@@ -78,9 +98,16 @@ function Modal({ isOpen, onClose, personaje }: ModalProps) {
               <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase border ${theme.badge}`}>
                 {personaje.tipo}
               </span>
+              
+              {/* 3. Implementación del botón de eliminar */}
+              <BotonEliminar onClick={handleDelete} />
+              
+              <button className="bg-yellow-400 hover:bg-yellow-500 text-black py-2 px-5 rounded-2xl cursor-pointer font-bold text-xs uppercase transition-colors">
+                Editar
+              </button>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-4 tracking-tighter">
+            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
               {personaje.nombre}
             </h2>
 

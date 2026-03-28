@@ -9,7 +9,8 @@ const initialPersonajes: Card[] = [
     ataque: 300,
     defensa: 1,
     imagen: "URL_DE_TU_IMAGEN_DE_PEPE",
-    descripcion: "La rana más poderosa del reino digital. Su mirada puede juzgar tu alma desde el otro lado de la pantalla."
+    descripcion: "La rana más poderosa del reino digital. Su mirada puede juzgar tu alma desde el otro lado de la pantalla.",
+    vida: 20
   },
   {
     nombre: "Electivire",
@@ -18,7 +19,8 @@ const initialPersonajes: Card[] = [
     ataque: 122,
     defensa: 80,
     imagen: "URL_DE_ELECTIVIRE",
-    descripcion: "Electivire, el Pokémon Rayo. Sus dos colas pueden liberar una descarga de 20.000 voltios en un instante."
+    descripcion: "Electivire, el Pokémon Rayo. Sus dos colas pueden liberar una descarga de 20.000 voltios en un instante.",
+    vida: 30
   },
   {
     nombre: "Charizard",
@@ -27,7 +29,8 @@ const initialPersonajes: Card[] = [
     ataque: 184,
     defensa: 78,
     imagen: "",
-    descripcion: "Sus llamas son lo suficientemente calientes como para fundir roca sólida. Es el epítome del poder ígneo."
+    descripcion: "Sus llamas son lo suficientemente calientes como para fundir roca sólida. Es el epítome del poder ígneo.",
+    vida: 90
   },
 ];
 
@@ -48,3 +51,4 @@ export function useCards() {
     addCard
   };
 }
+
