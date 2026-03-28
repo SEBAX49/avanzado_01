@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
+import { Home, PlusCircle } from "lucide-react";
 
 export function Navbar() {
   const location = useLocation();
 
   const navLinks = [
-    { name: "Inicio", path: "/", icon: "🏠" },
-    { name: "Nueva Carta", path: "/create", icon: "➕" },
+    { name: "Inicio", path: "/", icon: <Home size={18} /> },
+    { name: "Nueva Carta", path: "/create", icon: <PlusCircle size={18} /> },
   ];
 
   return (

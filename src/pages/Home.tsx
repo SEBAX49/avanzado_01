@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import CardDetail from '../components/CardDetail';
 import Modal from '../components/Modal';
-import { Card } from '../types/card';
+import type { Card } from '../types/card';
 
 interface HomeProps {
   cards: Card[];

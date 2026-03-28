@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Card } from '../types/card';
+import type { Card } from '../types/card';
 
 const initialPersonajes: Card[] = [
   {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card } from '../types/card';
+import type { Card } from '../types/card';
 
 interface CreateCardProps {
   onAddCard: (card: Card) => void;

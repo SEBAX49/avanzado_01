@@ -62,26 +62,12 @@ function CardDetail({ ataque, defensa, descripcion, imagen, nombre, numero, tipo
       >
         {/* Top gradient strip */}
         <div
-          className="absolute top-0 left-0 right-0 h-48 pointer-events-none transition-all duration-500 overflow-hidden"
+          className="absolute top-0 left-0 right-0 h-48 opacity-20 pointer-events-none transition-opacity duration-500"
           style={{
-            opacity: hovered ? 0.6 : 0.3
+            background: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
+            opacity: hovered ? 0.4 : 0.2
           }}
-        >
-          {imagen && !imagen.startsWith("URL_") && (
-            <img
-              src={imagen}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover blur-sm scale-150 opacity-100"
-            />
-          )}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-              opacity: 0.2
-            }}
-          />
-        </div>
+        />
 
         {/* Orb glow behind image */}
         <div
@@ -107,7 +93,7 @@ function CardDetail({ ataque, defensa, descripcion, imagen, nombre, numero, tipo
               <img
                 src={imagen}
                 alt={nombre}
-                className="h-28 w-28 border-2 border-white/20 rounded-full object-cover drop-shadow-[0_0_16px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform duration-500"
+                className="h-28 w-28 object-contain drop-shadow-[0_0_16px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform duration-500"
               />
             ) : (
               <div
@@ -145,7 +131,7 @@ function CardDetail({ ataque, defensa, descripcion, imagen, nombre, numero, tipo
 
           {/* Hint */}
           <p className="text-center text-[10px] text-white/20 mt-2 uppercase tracking-[0.2em] font-bold group-hover:text-white/40 transition-colors">
-            Click para detalles ✦
+            Click para ver mas detalles ✦
           </p>
         </div>
       </div>
