@@ -14,6 +14,8 @@ type ModalProps = {
   } | null;
 };
 
+
+//colores de los tipos de los personajes Aviso para sebas
 const tipoColors: Record<string, { from: string; to: string; badge: string }> = {
   CULEAO: { from: "#7c3aed", to: "#ec4899", badge: "bg-pink-500/20 text-pink-300 border-pink-500/40" },
   "Eléctrico": { from: "#f59e0b", to: "#fbbf24", badge: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40" },
@@ -60,7 +62,7 @@ function Modal({ isOpen, onClose, personaje }: ModalProps) {
             <div className="relative group">
               <div className="absolute inset-0 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-all" />
               {personaje.imagen && !personaje.imagen.startsWith("URL_") ? (
-                <img src={personaje.imagen} alt={personaje.nombre} className="w-48 h-48 object-contain relative z-10 drop-shadow-2xl animate-float" />
+                <img src={personaje.imagen} alt={personaje.nombre} className="w-48 h-48 object-cover relative rounded-full border-2 border-white/50 z-10 drop-shadow-2xl animate-float" />
               ) : (
                 <div className="w-48 h-48 rounded-full flex items-center justify-center text-7xl font-black text-white relative z-10 shadow-xl"
                   style={{ background: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}>
