@@ -13,6 +13,7 @@ type ModalProps = {
     defensa: number;
     descripcion: string;
     imagen: string;
+    vida: number;
   } | null;
 };
 
@@ -67,7 +68,7 @@ function Modal({ isOpen, onClose, onDelete, personaje }: ModalProps) {
         className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300 animate-fade-in"
         onClick={onClose}
       />
-
+ 
       <div
         className="relative w-full max-w-2xl bg-[#0c081c] rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl shadow-purple-500/20 animate-slide-up"
         style={{ animationDuration: '0.4s' }}

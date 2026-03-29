@@ -17,7 +17,8 @@ export function CreateCard({ onAddCard }: CreateCardProps) {
     ataque: 50,
     defensa: 50,
     descripcion: '',
-    imagen: ''
+    imagen: '',
+    vida: 50
   });
 
   const handleSubmit = (e: React.FormEvent) => {

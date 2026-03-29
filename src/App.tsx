@@ -3,11 +3,13 @@ import { Home } from './pages/Home';
 import { CreateCard } from './pages/CreateCard';
 import { Navbar } from './components/Navbar';
 import { useCards } from './hooks/useCards';
+import TaskManager from './components/TaskManager';
 
 function App() {
   const { cards, addCard } = useCards();
 
   return (
+
     <BrowserRouter>
       <div className="relative min-h-screen overflow-x-hidden font-sans text-white">
         
@@ -61,6 +63,8 @@ function App() {
         </footer>
       </div>
     </BrowserRouter>
+
+    
   );
 }
 
