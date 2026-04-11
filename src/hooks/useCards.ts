@@ -1,54 +1,102 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { Card } from '../types/card';
 
-const initialPersonajes: Card[] = [
-  {
-    nombre: "Pepe",
-    numero: "001",
-    tipo: "CULEAO",
-    ataque: 300,
-    defensa: 1,
-    imagen: "URL_DE_TU_IMAGEN_DE_PEPE",
-    descripcion: "La rana más poderosa del reino digital. Su mirada puede juzgar tu alma desde el otro lado de la pantalla.",
-    vida: 20
-  },
-  {
-    nombre: "Electivire",
-    numero: "002",
-    tipo: "Eléctrico",
-    ataque: 122,
-    defensa: 80,
-    imagen: "URL_DE_ELECTIVIRE",
-    descripcion: "Electivire, el Pokémon Rayo. Sus dos colas pueden liberar una descarga de 20.000 voltios en un instante.",
-    vida: 30
-  },
-  {
-    nombre: "Charizard",
-    numero: "006",
-    tipo: "Fuego",
-    ataque: 184,
-    defensa: 78,
-    imagen: "",
-    descripcion: "Sus llamas son lo suficientemente calientes como para fundir roca sólida. Es el epítome del poder ígneo.",
-    vida: 90
-  },
-];
+const API_URL = import.meta.env.VITE_API_URL || 'https://educapi-v2.onrender.com/card';
+const passkey = import.meta.env.VITE_USER_SECRET_PASSKEY || 'Seba704220AN';
+
+const getHeaders = (withBody = false): Record<string, string> => {
+  const headers: Record<string, string> = {
+    'usersecretpasskey': passkey
+  };
+  if (withBody) {
+    headers['Content-Type'] = 'application/json';
+  }
+  return headers;
+};
 
 export function useCards() {
-  const [cards, setCards] = useState<Card[]>(initialPersonajes);
+  const [cards, setCards] = useState<Card[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const addCard = useCallback((newCard: Card) => {
-    setCards(prev => [...prev, newCard]);
+  const fetchCards = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(API_URL, { headers: getHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.data) {
+          setCards(data.data);
+        }
+      } else {
+        console.error("Error status:", res.status);
+      }
+    } catch (error) {
+      console.error("Error fetching cards:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Future API integration:
-  // useEffect(() => {
-  //   fetch('api/cards').then(res => res.json()).then(setCards)
-  // }, [])
+  useEffect(() => {
+    fetchCards();
+  }, [fetchCards]);
+
+  const addCard = useCallback(async (newCard: Card) => {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: getHeaders(true),
+        body: JSON.stringify(newCard)
+      });
+      if (res.ok) {
+        await fetchCards();
+        return true;
+      }
+    } catch (error) {
+      console.error("Error adding card:", error);
+    }
+    return false;
+  }, [fetchCards]);
+
+  const updateCard = useCallback(async (idCard: number, updatedData: Partial<Card>) => {
+    try {
+      const res = await fetch(`${API_URL}/${idCard}`, {
+        method: 'PATCH',
+        headers: getHeaders(true),
+        body: JSON.stringify(updatedData)
+      });
+      if (res.ok) {
+        await fetchCards();
+        return true;
+      }
+    } catch (error) {
+      console.error("Error updating card:", error);
+    }
+    return false;
+  }, [fetchCards]);
+
+  const deleteCard = useCallback(async (idCard: number) => {
+    try {
+      const res = await fetch(`${API_URL}/${idCard}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+      });
+      if (res.ok) {
+        await fetchCards();
+        return true;
+      }
+    } catch (error) {
+      console.error("Error deleting card:", error);
+    }
+    return false;
+  }, [fetchCards]);
 
   return {
     cards,
-    addCard
+    loading,
+    addCard,
+    updateCard,
+    deleteCard,
+    refreshCards: fetchCards
   };
 }
-

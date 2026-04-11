@@ -1,10 +1,18 @@
 export interface Card {
-  nombre: string;
-  numero: string;
-  tipo: string;
-  ataque: number;
-  defensa: number;
-  descripcion: string;
-  imagen: string;
-  vida: number;
+  idCard?: number;
+  name: string;
+  description: string;
+  attack: number;
+  defense: number;
+  lifePoints: number;
+  pictureUrl: string;
+  attributes: {
+    tipo: string;
+    numero: string;
+    customType?: string;
+    customColor?: string;
+  };
+  userSecret?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

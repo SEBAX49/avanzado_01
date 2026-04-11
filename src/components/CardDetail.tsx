@@ -1,46 +1,57 @@
 import { useState } from "react";
 
 type Props = {
-  numero: string;
-  nombre: string;
-  tipo: string;
-  ataque: number;
-  defensa: number;
-  descripcion: string;
-  imagen: string;
+  name: string;
+  attack: number;
+  defense: number;
+  description: string;
+  pictureUrl: string;
+  attributes?: { tipo?: string; numero?: string; customType?: string; customColor?: string };
   delay?: number;
 };
 
+// Paleta lúgubre / Bestiario
 const tipoColors: Record<string, { from: string; to: string; badge: string; bar: string }> = {
-  CULEAO: { from: "#7c3aed", to: "#ec4899", badge: "bg-pink-500/20 text-pink-300 border-pink-500/40", bar: "from-purple-500 to-pink-500" },
-  "Eléctrico": { from: "#f59e0b", to: "#fbbf24", badge: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40", bar: "from-yellow-400 to-amber-500" },
-  Fuego: { from: "#ef4444", to: "#f97316", badge: "bg-orange-500/20 text-orange-300 border-orange-500/40", bar: "from-red-500 to-orange-500" },
-  Agua: { from: "#0ea5e9", to: "#38bdf8", badge: "bg-sky-500/20 text-sky-300 border-sky-500/40", bar: "from-sky-500 to-blue-400" },
-  Planta: { from: "#22c55e", to: "#86efac", badge: "bg-green-500/20 text-green-300 border-green-500/40", bar: "from-green-500 to-emerald-400" },
-  default: { from: "#6366f1", to: "#8b5cf6", badge: "bg-violet-500/20 text-violet-300 border-violet-500/40", bar: "from-indigo-500 to-violet-500" },
+  CULEAO: { from: "#1e1b4b", to: "#000000", badge: "bg-black/50 text-purple-300 border-purple-900", bar: "bg-purple-900" },
+  "Eléctrico": { from: "#422006", to: "#050505", badge: "bg-black/50 text-yellow-500 border-yellow-900", bar: "bg-yellow-700" },
+  Fuego: { from: "#450a0a", to: "#000000", badge: "bg-black/50 text-orange-500 border-red-900", bar: "bg-red-900" },
+  Agua: { from: "#082f49", to: "#020617", badge: "bg-black/50 text-blue-300 border-blue-900", bar: "bg-blue-900" },
+  Planta: { from: "#052e16", to: "#000000", badge: "bg-black/50 text-green-400 border-green-900", bar: "bg-green-900" },
+  default: { from: "#1e293b", to: "#0f172a", badge: "bg-black/50 text-gray-300 border-gray-600", bar: "bg-slate-600" },
 };
 
-function StatBar({ label, value, max = 350, colorClass }: { label: string; value: number; max?: number; colorClass: string }) {
+function StatBar({ label, value, max = 350, colorClass, customColor }: { label: string; value: number; max?: number; colorClass: string; customColor?: string }) {
   const pct = Math.min((value / max) * 100, 100);
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-1">
-        <span className="text-xs font-semibold uppercase tracking-wider text-white/50">{label}</span>
-        <span className="text-sm font-bold text-white/90">{value}</span>
+        <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-gray-400">{label}</span>
+        <span className="text-xs font-serif font-bold text-gray-200">{value}</span>
       </div>
-      <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+      <div className="h-[3px] w-full bg-slate-800 overflow-hidden relative border border-slate-700">
         <div
-          className={`h-full rounded-full bg-gradient-to-r ${colorClass} transition-all duration-1000 ease-out`}
-          style={{ width: `${pct}%` }}
+          className={`h-full transition-all duration-1000 ease-out ${colorClass}`}
+          style={{ width: `${pct}%`, ...(customColor ? { backgroundColor: customColor } : {}) }}
         />
       </div>
     </div>
   );
 }
 
-function CardDetail({ ataque, defensa, descripcion, imagen, nombre, numero, tipo, delay = 0 }: Props) {
+function CardDetail({ attack, defense, description, pictureUrl, name, attributes, delay = 0 }: Props) {
   const [hovered, setHovered] = useState(false);
-  const theme = tipoColors[tipo] ?? tipoColors.default;
+  
+  const tipo = attributes?.tipo ?? "default";
+  const numero = attributes?.numero ?? "000";
+  const isCustom = tipo === "Personalizado";
+  const displayTipo = isCustom ? (attributes?.customType || "Desconocido") : tipo;
+  const customColor = attributes?.customColor || "#ffffff";
+  const theme = isCustom ? {
+    from: "#000000",
+    to: "#000000",
+    badge: "bg-black/50 border-gray-600 font-serif",
+    bar: ""
+  } : (tipoColors[tipo] ?? tipoColors.default);
 
   return (
     <div
@@ -49,103 +60,89 @@ function CardDetail({ ataque, defensa, descripcion, imagen, nombre, numero, tipo
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* ── CARD FRONT ── */}
       <div
-        className={`relative w-full rounded-3xl border border-white/10 backdrop-blur-xl overflow-hidden transition-all duration-500 ${hovered ? "border-white/25 -translate-y-3 scale-[1.02]" : "shadow-lg"}`}
+        className={`relative w-full overflow-hidden transition-all duration-500 hk-border ${hovered ? "-translate-y-2" : ""}`}
         style={{
           minHeight: "420px",
-          background: "rgba(12, 8, 28, 0.80)",
-          boxShadow: hovered
-            ? `0 0 40px ${theme.from}55, 0 20px 60px rgba(0,0,0,0.6)`
-            : "0 8px 32px rgba(0,0,0,0.4)",
+          background: `radial-gradient(ellipse at top, ${theme.from} 0%, #000 80%)`,
         }}
       >
-        {/* Top gradient strip */}
+        {/* Top subtle texture strip */}
         <div
-          className="absolute top-0 left-0 right-0 h-48 pointer-events-none transition-all duration-500 overflow-hidden"
-          style={{
-            opacity: hovered ? 0.6 : 0.3
-          }}
+          className="absolute top-0 left-0 right-0 h-32 pointer-events-none transition-all duration-500 overflow-hidden"
+          style={{ opacity: hovered ? 0.4 : 0.1 }}
         >
-          {imagen && !imagen.startsWith("URL_") && (
+          {pictureUrl && !pictureUrl.startsWith("URL_") && (
             <img
-              src={imagen}
+              src={pictureUrl}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover blur-sm scale-150 opacity-100"
+              className="absolute inset-0 w-full h-full object-cover blur-md grayscale scale-150"
             />
           )}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(135deg, ${theme.from}, ${theme.to})`,
-              opacity: 0.2
-            }}
-          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black" />
         </div>
-
-        {/* Orb glow behind image */}
-        <div
-          className="absolute top-6 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full blur-3xl opacity-40 pointer-events-none transition-all duration-700"
-          style={{
-            background: `radial-gradient(circle, ${theme.from}, ${theme.to})`,
-            transform: hovered ? "translateX(-50%) scale(1.8)" : "translateX(-50%) scale(1)"
-          }}
-        />
 
         <div className="relative z-10 p-6 flex flex-col gap-4 h-full">
           {/* Header row */}
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-white/30 tracking-widest">#{numero}</span>
-            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${theme.badge}`}>
-              {tipo}
+            <span className="text-xs font-serif text-gray-500 tracking-widest">Nº {numero}</span>
+            <span 
+              className={`px-3 py-1 text-[10px] sm:text-[11px] font-sans uppercase tracking-[0.2em] border ${theme.badge} shadow-sm`}
+              style={isCustom ? { color: customColor, borderColor: customColor } : {}}
+            >
+              {displayTipo}
             </span>
           </div>
 
           {/* Image Area */}
-          <div className="flex justify-center h-28 relative">
-            {imagen && !imagen.startsWith("URL_") ? (
+          <div className="flex justify-center h-28 relative mt-2">
+            {pictureUrl && !pictureUrl.startsWith("URL_") ? (
               <img
-                src={imagen}
-                alt={nombre}
-                className="h-28 w-28 border-2 border-white/20 rounded-full object-cover drop-shadow-[0_0_16px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform duration-500"
+                src={pictureUrl}
+                alt={name}
+                className="h-28 w-28 border-2 border-slate-600 rounded-sm object-cover grayscale-[30%] shadow-[0_0_15px_rgba(0,0,0,1)] group-hover:grayscale-0 transition-all duration-500"
               />
             ) : (
               <div
-                className="h-28 w-28 rounded-full flex items-center justify-center text-5xl font-black shadow-inner"
-                style={{
-                  background: `linear-gradient(135deg, ${theme.from}33, ${theme.to}33)`,
-                  border: `2px solid ${theme.from}44`,
-                  color: "white"
-                }}
+                className="h-28 w-28 rounded-sm bg-[#050505] flex items-center justify-center text-5xl font-serif text-slate-500 border-2 border-slate-700 shadow-inner"
               >
-                {nombre.charAt(0)}
+                {name.charAt(0)}
               </div>
             )}
+            {/* Ornamentation border corners */}
+            <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-slate-400 opacity-50" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-slate-400 opacity-50" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-slate-400 opacity-50" />
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-slate-400 opacity-50" />
           </div>
 
           {/* Name & Desc */}
-          <div className="text-center mt-2">
-            <h2
-              className="text-2xl font-black uppercase tracking-wider gradient-text transition-all duration-500"
-              style={{
-                backgroundImage: `linear-gradient(90deg, ${theme.from}, ${theme.to}, ${theme.from})`,
-                transform: hovered ? "scale(1.05)" : "scale(1)"
-              }}
-            >
-              {nombre}
+          <div className="text-center mt-3">
+            <h2 className="text-xl font-serif uppercase tracking-[0.15em] text-gray-200 transition-all duration-500 group-hover:text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              {name}
             </h2>
-            <p className="text-xs text-white/40 mt-1 italic line-clamp-2 px-2 overflow-hidden h-8">{descripcion}</p>
+            <div className="w-12 h-[1px] bg-slate-600 mx-auto mt-2 mb-3" />
+            <p className="text-xs font-sans text-gray-400 italic line-clamp-2 px-2 overflow-hidden h-8">{description}</p>
           </div>
 
           {/* Stats Summary */}
-          <div className="flex flex-col gap-3 mt-auto">
-            <StatBar label="Ataque" value={ataque} colorClass={theme.bar} />
-            <StatBar label="Defensa" value={defensa} colorClass={theme.bar} />
+          <div className="flex flex-col gap-3 mt-auto bg-black/40 p-3 border border-slate-800">
+            {isCustom ? (
+               <>
+                 <StatBar label="Ataque" value={attack} colorClass="" customColor={customColor} />
+                 <StatBar label="Defensa" value={defense} colorClass="" customColor={customColor} />
+               </>
+            ) : (
+               <>
+                 <StatBar label="Ataque" value={attack} colorClass={theme.bar} />
+                 <StatBar label="Defensa" value={defense} colorClass={theme.bar} />
+               </>
+            )}
           </div>
 
           {/* Hint */}
-          <p className="text-center text-[10px] text-white/20 mt-2 uppercase tracking-[0.2em] font-bold group-hover:text-white/40 transition-colors">
-            Click para detalles ✦
+          <p className="text-center text-[9px] font-sans text-slate-600 mt-2 uppercase tracking-[0.2em] group-hover:text-slate-400 transition-colors">
+            Examinar Registro
           </p>
         </div>
       </div>

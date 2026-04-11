@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import type { Card } from '../types/card';
 
-interface CreateCardProps {
-  onAddCard: (card: Card) => void;
+interface EditCardProps {
+  cards: Card[];
+  onUpdateCard: (id: number, card: Partial<Card>) => Promise<boolean>;
 }
 
 const TIPOS = ["CULEAO", "Eléctrico", "Fuego", "Agua", "Planta", "Normal", "Personalizado"];
 
-export function CreateCard({ onAddCard }: CreateCardProps) {
+export function EditCard({ cards, onUpdateCard }: EditCardProps) {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     name: '',
     numero: '',
@@ -23,6 +26,26 @@ export function CreateCard({ onAddCard }: CreateCardProps) {
     lifePoints: 50
   });
 
+  useEffect(() => {
+    if (cards.length > 0 && id) {
+      const cardToEdit = cards.find(c => String(c.idCard) === String(id));
+      if (cardToEdit) {
+        setFormData({
+          name: cardToEdit.name || '',
+          numero: cardToEdit.attributes?.numero || '',
+          tipo: cardToEdit.attributes?.tipo === 'Personalizado' ? 'Personalizado' : (TIPOS.includes(cardToEdit.attributes?.tipo || 'CULEAO') ? (cardToEdit.attributes?.tipo || 'CULEAO') : 'Personalizado'),
+          customType: cardToEdit.attributes?.customType || cardToEdit.attributes?.tipo || '',
+          customColor: cardToEdit.attributes?.customColor || '#4f46e5',
+          attack: cardToEdit.attack || 50,
+          defense: cardToEdit.defense || 50,
+          description: cardToEdit.description || '',
+          pictureUrl: cardToEdit.pictureUrl || '',
+          lifePoints: cardToEdit.lifePoints || 50
+        });
+      }
+    }
+  }, [cards, id]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.numero) {
@@ -30,22 +53,22 @@ export function CreateCard({ onAddCard }: CreateCardProps) {
       return;
     }
     
-    const newCard: Card = {
-      name: formData.name,
-      description: formData.description,
-      attack: formData.attack,
-      defense: formData.defense,
-      lifePoints: formData.lifePoints,
-      pictureUrl: formData.pictureUrl,
-      attributes: {
-        tipo: formData.tipo,
-        numero: formData.numero,
-        customType: formData.customType,
-        customColor: formData.customColor
-      }
-    };
-    
-    await onAddCard(newCard);
+    if (id) {
+      await onUpdateCard(Number(id), {
+        name: formData.name,
+        description: formData.description,
+        attack: formData.attack,
+        defense: formData.defense,
+        lifePoints: formData.lifePoints,
+        pictureUrl: formData.pictureUrl,
+        attributes: {
+          tipo: formData.tipo,
+          numero: formData.numero,
+          customType: formData.customType,
+          customColor: formData.customColor
+        }
+      });
+    }
     navigate('/');
   };
 
@@ -57,14 +80,18 @@ export function CreateCard({ onAddCard }: CreateCardProps) {
     }));
   };
 
+  if (cards.length === 0) {
+    return <div className="text-white text-center py-32 text-xl italic opacity-50">Cargando carta...</div>;
+  }
+
   return (
     <div className="relative z-10 max-w-2xl mx-auto px-6 py-32">
       <div
-        className="bg-[#080808]/90 p-8 md:p-12 rounded-sm hk-border shadow-2xl animate-card-enter"
+        className="bg-[#080808]/90 p-8 md:p-12 rounded-sm hk-border shadow-2xl animate-card-enter shadow-slate-900/50"
       >
         <header className="mb-10 text-center border-b border-slate-800 pb-6">
-          <h2 className="text-3xl md:text-4xl font-serif uppercase tracking-[0.15em] text-[#e2e2e2] mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Nuevo Registro</h2>
-          <p className="text-gray-500 text-sm font-sans italic">Inscribe un nuevo sello en el Diario del Cazador.</p>
+          <h2 className="text-3xl md:text-4xl font-serif uppercase tracking-[0.15em] text-[#e2e2e2] mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Editar Registro</h2>
+          <p className="text-gray-500 text-sm font-sans italic">Interviene en el conocimiento sagrado del sello.</p>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -145,30 +172,30 @@ export function CreateCard({ onAddCard }: CreateCardProps) {
                 <span className="text-slate-300 font-serif">{formData.attack}</span>
               </label>
               <input
-                type="range"
-                name="attack"
-                min="1"
-                max="350"
-                value={formData.attack}
-                onChange={handleChange}
-                className="w-full h-1 bg-slate-800 appearance-none cursor-pointer accent-slate-400"
+                 type="range"
+                 name="attack"
+                 min="1"
+                 max="350"
+                 value={formData.attack}
+                 onChange={handleChange}
+                 className="w-full h-1 bg-slate-800 appearance-none cursor-pointer accent-slate-400"
               />
             </div>
             {/* Defensa */}
             <div className="space-y-2 text-center md:text-left">
-              <label className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-sans ml-1 flex justify-between">
-                <span>Resistencia (Caparazón)</span>
-                <span className="text-slate-400 font-serif">{formData.defense}</span>
-              </label>
-              <input
-                type="range"
-                name="defense"
-                min="1"
-                max="350"
-                value={formData.defense}
-                onChange={handleChange}
-                className="w-full h-1 bg-slate-800 appearance-none cursor-pointer accent-slate-500"
-              />
+               <label className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-sans ml-1 flex justify-between">
+                  <span>Resistencia (Caparazón)</span>
+                  <span className="text-slate-400 font-serif">{formData.defense}</span>
+               </label>
+               <input
+                 type="range"
+                 name="defense"
+                 min="1"
+                 max="350"
+                 value={formData.defense}
+                 onChange={handleChange}
+                 className="w-full h-1 bg-slate-800 appearance-none cursor-pointer accent-slate-500"
+               />
             </div>
           </div>
 
@@ -218,7 +245,7 @@ export function CreateCard({ onAddCard }: CreateCardProps) {
             type="submit"
             className="w-full py-4 mt-6 bg-[#111] border border-slate-700 text-gray-300 font-serif font-bold uppercase tracking-[0.2em] hover:bg-[#1a1a1a] hover:text-white transition-all shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] rounded-sm"
           >
-            Inscribir en el Diario
+            Modificar Sello
           </button>
         </form>
       </div>

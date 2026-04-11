@@ -1,57 +1,76 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { CreateCard } from './pages/CreateCard';
+import { EditCard } from './pages/EditCard';
 import { Navbar } from './components/Navbar';
 import { useCards } from './hooks/useCards';
-import TaskManager from './components/TaskManager';
 
 function App() {
-  const { cards, addCard } = useCards();
+  const { cards, loading, addCard, deleteCard, updateCard } = useCards();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0a0618] flex items-center justify-center text-white font-mono text-xl tracking-widest animate-pulse">
+        Cargando Colección...
+      </div>
+    );
+  }
 
   return (
-
     <BrowserRouter>
-      <div className="relative min-h-screen overflow-x-hidden font-sans text-white">
+      <div className="relative min-h-screen overflow-x-hidden font-sans text-white bg-[#0b0c10]">
         
         {/* ── Navbar ── */}
         <Navbar />
 
-        {/* ── Background dark gradient ── */}
+        {/* ── Background dark void ── */}
         <div
           className="fixed inset-0 -z-10"
           style={{
-            background: "linear-gradient(135deg, #0a0618 0%, #100a2e 40%, #0c0618 70%, #130526 100%)",
+            background: "radial-gradient(ellipse at bottom, #1d2d44 0%, #0b0c10 100%)",
           }}
         />
 
-        {/* ── Ambient orbs ── */}
-        <div
-          className="fixed -top-40 -left-40 w-[600px] h-[600px] rounded-full -z-10 opacity-20 blur-[100px]"
-          style={{
-            background: "radial-gradient(circle, #7c3aed, transparent 70%)",
-            animation: "orb-move 12s ease-in-out infinite",
-          }}
-        />
-        <div
-          className="fixed -bottom-40 -right-40 w-[500px] h-[500px] rounded-full -z-10 opacity-20 blur-[100px]"
-          style={{
-            background: "radial-gradient(circle, #ec4899, transparent 70%)",
-            animation: "orb-move 15s ease-in-out infinite reverse",
-          }}
-        />
-        <div
-          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full -z-10 opacity-10 blur-[120px]"
-          style={{
-            background: "radial-gradient(circle, #38bdf8, transparent 70%)",
-            animation: "orb-move 18s ease-in-out infinite 3s",
-          }}
-        />
+        {/* ── Esporas y Alma (Particles) ── */}
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+           {[...Array(8)].map((_, i) => (
+              <div 
+                key={`inf-${i}`}
+                className="absolute rounded-full opacity-60 animate-particle-up"
+                style={{
+                  width: `${Math.random() * 6 + 4}px`,
+                  height: `${Math.random() * 6 + 4}px`,
+                  background: '#f28833',
+                  boxShadow: '0 0 12px #fbbd23',
+                  left: `${Math.random() * 100}%`,
+                  animationDuration: `${Math.random() * 10 + 10}s`,
+                  animationDelay: `${Math.random() * 15}s`
+                }}
+              />
+           ))}
+           {[...Array(12)].map((_, i) => (
+              <div 
+                key={`soul-${i}`}
+                className="absolute rounded-full opacity-40 animate-particle-up"
+                style={{
+                  width: `${Math.random() * 5 + 2}px`,
+                  height: `${Math.random() * 5 + 2}px`,
+                  background: '#e0e0e0',
+                  boxShadow: '0 0 10px #86c6f4',
+                  left: `${Math.random() * 100}%`,
+                  animationDuration: `${Math.random() * 12 + 12}s`,
+                  animationDelay: `${Math.random() * 15}s`
+                }}
+              />
+           ))}
+        </div>
 
         {/* ── Routes ── */}
         <main className="relative z-10">
           <Routes>
-            <Route path="/" element={<Home cards={cards} />} />
+            <Route path="/" element={<Home cards={cards} onDeleteCard={deleteCard} />} />
             <Route path="/create" element={<CreateCard onAddCard={addCard} />} />
+            <Route path="/edit/:id" element={<EditCard cards={cards} onUpdateCard={updateCard} />} />
           </Routes>
         </main>
 
@@ -63,8 +82,6 @@ function App() {
         </footer>
       </div>
     </BrowserRouter>
-
-    
   );
 }
 
