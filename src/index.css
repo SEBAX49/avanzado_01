@@ -11,6 +11,10 @@
   --animate-fade-in: fade-in 0.8s ease both;
   --animate-card-enter: card-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-particle-up: particle-up linear infinite;
+  --animate-title-glow: title-glow 4s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
+  --animate-draw-line-l: draw-line-l 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-draw-line-r: draw-line-r 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 body {
@@ -21,6 +25,38 @@ body {
 
 h1, h2, h3, h4, .font-display, .font-serif {
   font-family: var(--font-serif);
+}
+
+@keyframes title-glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 
+                 0 0 20px rgba(134, 198, 244, 0.15), 
+                 0 0 40px rgba(134, 198, 244, 0.05),
+                 0 2px 4px rgba(0, 0, 0, 0.9);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 
+                 0 0 30px rgba(134, 198, 244, 0.4), 
+                 0 0 60px rgba(134, 198, 244, 0.2),
+                 0 2px 4px rgba(0, 0, 0, 0.9);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.6; transform: scale(1) rotate(45deg); box-shadow: 0 0 8px #f7f7f7; }
+  50% { opacity: 1; transform: scale(1.3) rotate(45deg); box-shadow: 0 0 15px #f7f7f7, 0 0 30px #86c6f4; }
+}
+
+@keyframes draw-line-l {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes draw-line-r {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
 }
 
 @keyframes float {

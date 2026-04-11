@@ -22,7 +22,7 @@ export function Home({ cards, onDeleteCard }: HomeProps) {
       {/* Header */}
       <header className="text-center mb-16" style={{ animation: "slide-up 0.7s cubic-bezier(0.16,1,0.3,1) both" }}>
         <p className="text-[10px] font-sans uppercase tracking-[0.4em] text-gray-500 mb-3 font-semibold">✦ Bestiario de Hallownest ✦</p>
-        <h1 className="text-5xl md:text-6xl font-serif uppercase tracking-widest text-[#e2e2e2] drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] mb-4">
+        <h1 className="text-5xl md:text-6xl font-serif uppercase tracking-widest text-[#e2e2e2] inline-block origin-center animate-title-glow mb-4">
           Diario del Cazador
         </h1>
         <p className="text-gray-400 font-sans text-lg max-w-md mx-auto leading-relaxed italic">
@@ -31,11 +31,11 @@ export function Home({ cards, onDeleteCard }: HomeProps) {
 
         {/* Divider */}
         <div className="flex items-center justify-center gap-4 mt-8">
-          <div className="h-[2px] w-32 bg-gradient-to-r from-transparent to-slate-500" />
-          <div className="w-1.5 h-1.5 rotate-45 bg-[#e0e0e0] shadow-[0_0_8px_#f7f7f7]" />
-          <div className="text-gray-400 text-[10px] uppercase font-serif tracking-[0.4em] mx-2">Vacio</div>
-          <div className="w-1.5 h-1.5 rotate-45 bg-[#e0e0e0] shadow-[0_0_8px_#f7f7f7]" />
-          <div className="h-[2px] w-32 bg-gradient-to-l from-transparent to-slate-500" />
+          <div className="h-[2px] w-32 bg-gradient-to-r from-transparent to-slate-500 animate-draw-line-l" style={{ transformOrigin: 'right' }} />
+          <div className="w-1.5 h-1.5 rotate-45 bg-[#e0e0e0] shadow-[0_0_8px_#f7f7f7] animate-pulse-slow object-center" />
+          <div className="text-gray-400 text-[10px] uppercase font-serif tracking-[0.4em] mx-2 animate-fade-in" style={{ animationDelay: '0.4s' }}>Vacío</div>
+          <div className="w-1.5 h-1.5 rotate-45 bg-[#e0e0e0] shadow-[0_0_8px_#f7f7f7] animate-pulse-slow" style={{ animationDelay: '0.2s' }} />
+          <div className="h-[2px] w-32 bg-gradient-to-l from-transparent to-slate-500 animate-draw-line-r" style={{ transformOrigin: 'left' }} />
         </div>
       </header>
 
