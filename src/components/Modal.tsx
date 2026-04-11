@@ -94,7 +94,7 @@ function Modal({ isOpen, onClose, onDelete, personaje }: ModalProps) {
             <div className="relative group p-2">
               <div className="absolute inset-0 border border-slate-700 rotate-45 rounded-sm opacity-20" />
               {personaje.pictureUrl && !personaje.pictureUrl.startsWith("URL_") ? (
-                <img src={personaje.pictureUrl} alt={personaje.name} className="w-48 h-48 object-cover relative rounded-full border-4 border-[#1c1c1c] z-10 drop-shadow-[0_0_20px_rgba(0,0,0,1)] grayscale-[20%]" />
+                <img src={personaje.pictureUrl} alt={personaje.name} className="w-48 h-48 object-cover relative rounded-full border-4 border-[#1c1c1c] z-10 drop-shadow-[0_0_20px_rgba(0,0,0,1)] grayscale-20" />
               ) : (
                 <div className="w-48 h-48 rounded-full flex items-center justify-center text-7xl font-serif text-slate-500 relative z-10 shadow-inner bg-[#111]"
                   style={{ border: `4px solid #1c1c1c` }}>

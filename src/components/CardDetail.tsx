@@ -79,7 +79,7 @@ function CardDetail({ attack, defense, description, pictureUrl, name, attributes
               className="absolute inset-0 w-full h-full object-cover blur-md grayscale scale-150"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black" />
+          <div className="absolute inset-0 bg-linear-to-b from-transparent to-black" />
         </div>
 
         <div className="relative z-10 p-6 flex flex-col gap-4 h-full">
@@ -100,7 +100,7 @@ function CardDetail({ attack, defense, description, pictureUrl, name, attributes
               <img
                 src={pictureUrl}
                 alt={name}
-                className="h-28 w-28 border-2 border-slate-600 rounded-sm object-cover grayscale-[30%] shadow-[0_0_15px_rgba(0,0,0,1)] group-hover:grayscale-0 transition-all duration-500"
+                className="h-28 w-28 border-2 border-slate-600 rounded-sm object-cover grayscale-30 shadow-[0_0_15px_rgba(0,0,0,1)] group-hover:grayscale-0 transition-all duration-500"
               />
             ) : (
               <div
@@ -121,7 +121,7 @@ function CardDetail({ attack, defense, description, pictureUrl, name, attributes
             <h2 className="text-xl font-serif uppercase tracking-[0.15em] text-gray-200 transition-all duration-500 group-hover:text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               {name}
             </h2>
-            <div className="w-12 h-[1px] bg-slate-600 mx-auto mt-2 mb-3" />
+            <div className="w-12 h-px bg-slate-600 mx-auto mt-2 mb-3" />
             <p className="text-xs font-sans text-gray-400 italic line-clamp-2 px-2 overflow-hidden h-8">{description}</p>
           </div>
 

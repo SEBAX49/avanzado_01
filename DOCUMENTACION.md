@@ -95,3 +95,32 @@ Se resolvió la anomalía "*Body cannot be empty when content-type is set to app
 - En la interfaz de crear o editar cartas, el usuario humano ya no recibe inputs de texto abierto cuando se solicitan identificaciones numéricas (por ejemplo, el campo `numero`). 
 - Fue migrado al estándar riguroso nativo `<input type="number" min="0" />`. El navegador detiene instantáneamente a los caracteres no numéricos o negativos (a b c ! @ -) protegiendo el CRUD de registrar strings corrompidos.
 - Adicionalmente, insertamos el atributo `lifePoints` en los formularios para que también dispongas del espectro gráfico usando la estética de la barra slider (con valor máximo adaptado a 5000 puntos de vida).
+
+---
+
+## 🚀 Despliegue en Vercel (Guía Paso a Paso)
+
+Para que el proyecto funcione correctamente una vez desplegado en la nube de Vercel, sigue estas instrucciones técnicas:
+
+### 1. Configuración de Variables de Entorno
+Vercel no puede leer tu archivo `.env` local por seguridad. Debes cargar manualmente las llaves en el panel del proyecto (**Settings > Environment Variables**):
+
+| Key | Value (Ejemplo) |
+| :--- | :--- |
+| `VITE_API_URL` | `https://educapi-v2.onrender.com/card` |
+| `VITE_USER_SECRET_PASSKEY` | `Seba704220AN` |
+
+> [!IMPORTANT]
+> Sin la variable `VITE_USER_SECRET_PASSKEY`, las peticiones de creación y borrado serán rechazadas por el servidor (Error 401/403).
+
+### 2. Comandos de Construcción (Build Settings)
+Asegúrate de que Vercel detecte automáticamente la configuración de Vite. Si no, ajústalo así:
+- **Framework Preset**: `Vite`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+
+### 3. Manejo de Rutas (vercel.json)
+Si al recargar la página en una ruta interna (ej. `/create`) obtienes un error 404, es porque Vercel intenta buscar un archivo físico. Para solucionar esto, el proyecto incluye (o deberías verificar) que las rutas se redirijan al `index.html`.
+
+---
+*Este documento fue actualizado para garantizar que el estudiante posea todo el conocimiento técnico necesario para el despliegue y defensa del taller.*
