@@ -78,11 +78,15 @@ function App() {
         <footer
           className="text-center pb-10 opacity-20 text-xs tracking-[0.3em] uppercase"
         >
-          ✦ Sistema de Colección Legendaria ✦
         </footer>
       </div>
     </BrowserRouter>
   );
+  <Route
+  path='/seleccionar-cartas'
+  element={<SeleccionarCartas mazo={mazoCartas} loading={loading} />}
+  />  
+
 }
 
 export default App;
